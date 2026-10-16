@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#142e53" />
+      <stop offset="100%" stop-color="#0c1d35" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+  
+  <!-- Background with slight rounded corners for standalone SVG view -->
+  <rect width="512" height="512" rx="100" fill="url(#bg)"/>
+  
+  <!-- Outer accent circle in vibrant yellow #fffe42 -->
+  <circle cx="256" cy="256" r="210" fill="none" stroke="#fffe42" stroke-width="12" stroke-dasharray="8 6" opacity="0.4" />
+  
+  <!-- Central Paw Print & Dog Head emblem in #fffe42 with white details -->
+  <g filter="url(#shadow)">
+    <!-- Main central pad (heart/curved bean shape) -->
+    <path d="M256,220 C220,220 185,250 195,305 C205,355 240,380 256,380 C272,380 307,355 317,305 C327,250 292,220 256,220 Z" fill="#fffe42"/>
+    
+    <!-- Inner playful puppy face silhouette inside pad in #142e53 -->
+    <ellipse cx="236" cy="290" rx="6" ry="9" fill="#142e53" />
+    <ellipse cx="276" cy="290" rx="6" ry="9" fill="#142e53" />
+    <polygon points="256,310 248,322 264,322" fill="#142e53" />
+    <path d="M248,326 Q256,334 264,326" stroke="#142e53" stroke-width="3" fill="none" stroke-linecap="round"/>
+    
+    <!-- Toe 1 (Far Left) -->
+    <ellipse cx="160" cy="225" rx="32" ry="46" transform="rotate(-30 160 225)" fill="#fffe42"/>
+    <!-- Toe 2 (Center Left) -->
+    <ellipse cx="220" cy="165" rx="32" ry="50" transform="rotate(-12 220 165)" fill="#fffe42"/>
+    <!-- Toe 3 (Center Right) -->
+    <ellipse cx="292" cy="165" rx="32" ry="50" transform="rotate(12 292 165)" fill="#fffe42"/>
+    <!-- Toe 4 (Far Right) -->
+    <ellipse cx="352" cy="225" rx="32" ry="46" transform="rotate(30 352 225)" fill="#fffe42"/>
+  </g>
+  
+  <!-- Subtle sparkles / daycare star indicators -->
+  <path d="M120 120 L125 135 L140 140 L125 145 L120 160 L115 145 L100 140 L115 135 Z" fill="#ffffff" opacity="0.9"/>
+  <path d="M390 110 L394 122 L406 126 L394 130 L390 142 L386 130 L374 126 L386 122 Z" fill="#fffe42" opacity="0.9"/>
+  <path d="M380 370 L383 379 L392 382 L383 385 L380 394 L377 385 L368 382 L377 379 Z" fill="#ffffff" opacity="0.7"/>
+</svg>

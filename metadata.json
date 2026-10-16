@@ -1,0 +1,8 @@
+{
+  "name": "CrecheCanina - Presença",
+  "description": "App mobile-first de controle de presença e check-in para creche canina com Supabase e PWA.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

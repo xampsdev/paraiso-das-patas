@@ -11,6 +11,7 @@ import {
 } from 'recharts';
 import { Flame, TrendingUp, Calendar, Sparkles } from 'lucide-react';
 import { DailyAttendanceStat } from '../lib/dataService';
+import { useTheme } from '../hooks/useTheme';
 
 interface AttendanceChart7DaysProps {
   stats: DailyAttendanceStat[];
@@ -28,7 +29,7 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div className="bg-[#142e53] text-white p-2.5 rounded-xl shadow-xl border border-slate-700 text-xs z-50">
+      <div className="bg-[#142e53] dark:bg-[#091424] text-white p-2.5 rounded-xl shadow-xl border border-slate-700 dark:border-[#1e3a63] text-xs z-50">
         <p className="font-extrabold text-[#fffe42] flex items-center gap-1">
           <span>{data.fullWeekday}</span>
           <span className="text-white/70 font-normal">({data.dayLabel})</span>
@@ -54,6 +55,8 @@ export const AttendanceChart7Days: React.FC<AttendanceChart7DaysProps> = ({
   onSelectDate,
   isLoading = false,
 }) => {
+  const { isDark } = useTheme();
+
   // Cálculos de métricas da semana
   const metrics = useMemo(() => {
     if (!stats || stats.length === 0) {
@@ -82,18 +85,18 @@ export const AttendanceChart7Days: React.FC<AttendanceChart7DaysProps> = ({
   }, [stats]);
 
   return (
-    <div className="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-xs space-y-3">
+    <div className="bg-white dark:bg-[#0d1c31] rounded-3xl p-4 sm:p-5 border border-slate-200 dark:border-[#1b3356] shadow-xs space-y-3 transition-colors">
       {/* Chart Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-[#142e53] text-[#fffe42] flex items-center justify-center font-black">
+          <div className="w-8 h-8 rounded-xl bg-[#142e53] dark:bg-[#12243d] text-[#fffe42] flex items-center justify-center font-black border border-transparent dark:border-[#1e3a63]">
             <TrendingUp className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="font-extrabold text-sm sm:text-base text-[#142e53] flex items-center gap-1.5 leading-tight">
+            <h3 className="font-extrabold text-sm sm:text-base text-[#142e53] dark:text-[#fffe42] flex items-center gap-1.5 leading-tight">
               <span>Frequência dos Últimos 7 Dias</span>
             </h3>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
               Toque em uma barra para carregar as presenças do dia
             </p>
           </div>
@@ -101,11 +104,11 @@ export const AttendanceChart7Days: React.FC<AttendanceChart7DaysProps> = ({
 
         {/* Peak Badge */}
         {metrics.peakDay && (
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold self-start sm:self-auto">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-300 text-xs font-bold self-start sm:self-auto">
             <Flame className="w-3.5 h-3.5 text-amber-600 flex-shrink-0 animate-bounce" />
             <span>
               Maior movimento:{' '}
-              <strong className="text-[#142e53]">
+              <strong className="text-[#142e53] dark:text-[#fffe42]">
                 {metrics.peakDay.weekday} ({metrics.peakDay.count} cães)
               </strong>
             </span>
@@ -114,25 +117,25 @@ export const AttendanceChart7Days: React.FC<AttendanceChart7DaysProps> = ({
       </div>
 
       {/* Quick Summary Chips */}
-      <div className="grid grid-cols-2 gap-2 text-xs bg-slate-50 p-2.5 rounded-2xl border border-slate-200/80">
+      <div className="grid grid-cols-2 gap-2 text-xs bg-slate-50 dark:bg-[#12243d] p-2.5 rounded-2xl border border-slate-200/80 dark:border-[#1e3a63]">
         <div className="flex items-center justify-between px-1">
-          <span className="text-slate-500 font-medium">Total da semana:</span>
-          <span className="font-black text-[#142e53] text-sm">{metrics.total} cães</span>
+          <span className="text-slate-500 dark:text-slate-400 font-medium">Total da semana:</span>
+          <span className="font-black text-[#142e53] dark:text-[#fffe42] text-sm">{metrics.total} cães</span>
         </div>
-        <div className="flex items-center justify-between px-1 border-l border-slate-200">
-          <span className="text-slate-500 font-medium">Média diária:</span>
-          <span className="font-black text-[#142e53] text-sm">{metrics.average} / dia</span>
+        <div className="flex items-center justify-between px-1 border-l border-slate-200 dark:border-[#1e3a63]">
+          <span className="text-slate-500 dark:text-slate-400 font-medium">Média diária:</span>
+          <span className="font-black text-[#142e53] dark:text-[#fffe42] text-sm">{metrics.average} / dia</span>
         </div>
       </div>
 
       {/* Chart Canvas */}
       <div className="w-full h-48 sm:h-52 pt-2">
         {isLoading ? (
-          <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs">
+          <div className="w-full h-full flex items-center justify-center text-slate-400 dark:text-slate-500 text-xs">
             Carregando gráfico...
           </div>
         ) : stats.length === 0 ? (
-          <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs">
+          <div className="w-full h-full flex items-center justify-center text-slate-400 dark:text-slate-500 text-xs">
             Sem dados nos últimos 7 dias.
           </div>
         ) : (
@@ -151,7 +154,7 @@ export const AttendanceChart7Days: React.FC<AttendanceChart7DaysProps> = ({
               }}
               className="cursor-pointer"
             >
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? '#1e3a63' : '#f1f5f9'} />
               <XAxis
                 dataKey="weekday"
                 axisLine={false}
@@ -168,7 +171,13 @@ export const AttendanceChart7Days: React.FC<AttendanceChart7DaysProps> = ({
                         y={0}
                         dy={12}
                         textAnchor="middle"
-                        fill={isCurrentSelected ? '#142e53' : isPeak ? '#d97706' : '#64748b'}
+                        fill={
+                          isCurrentSelected
+                            ? isDark ? '#fffe42' : '#142e53'
+                            : isPeak
+                            ? '#38bdf8'
+                            : isDark ? '#94a3b8' : '#64748b'
+                        }
                         fontSize={11}
                         fontWeight={isCurrentSelected || isPeak ? 800 : 500}
                       >
@@ -179,7 +188,7 @@ export const AttendanceChart7Days: React.FC<AttendanceChart7DaysProps> = ({
                         y={0}
                         dy={24}
                         textAnchor="middle"
-                        fill={isCurrentSelected ? '#142e53' : '#94a3b8'}
+                        fill={isCurrentSelected ? (isDark ? '#fffe42' : '#142e53') : isDark ? '#64748b' : '#94a3b8'}
                         fontSize={9}
                         fontWeight={isCurrentSelected ? 700 : 400}
                       >
@@ -194,29 +203,25 @@ export const AttendanceChart7Days: React.FC<AttendanceChart7DaysProps> = ({
                 allowDecimals={false}
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 10, fill: '#94a3b8' }}
+                tick={{ fontSize: 10, fill: isDark ? '#64748b' : '#94a3b8' }}
                 domain={[0, (dataMax: number) => Math.max(dataMax + 1, 4)]}
               />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(20, 46, 83, 0.04)' }} />
+              <Tooltip content={<CustomTooltip />} cursor={{ fill: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(20, 46, 83, 0.04)' }} />
               <Bar dataKey="count" radius={[8, 8, 2, 2]}>
                 {stats.map((entry) => {
                   const isSelected = entry.date === selectedDate;
                   const isPeak = entry.isPeak;
 
-                  // Cores:
-                  // Selecionado -> Amarelo vibrante #fffe42 com contorno navy
-                  // Pico -> Âmbar dourado #f59e0b
-                  // Normal -> Azul marinho da marca #142e53
-                  let fill = '#142e53';
+                  let fill = isDark ? '#234470' : '#142e53';
                   let stroke = 'transparent';
                   let strokeWidth = 0;
 
                   if (isSelected) {
                     fill = '#fffe42';
-                    stroke = '#142e53';
-                    strokeWidth = 2.5;
+                    stroke = isDark ? '#ffffff' : '#142e53';
+                    strokeWidth = 2;
                   } else if (isPeak) {
-                    fill = '#0284c7'; // Azul royal destacado para maior clareza ou navy
+                    fill = '#38bdf8'; // Sky blue destacando o pico
                   }
 
                   return (
@@ -236,14 +241,14 @@ export const AttendanceChart7Days: React.FC<AttendanceChart7DaysProps> = ({
       </div>
 
       {/* Legend / Tip */}
-      <div className="flex flex-wrap items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-100">
+      <div className="flex flex-wrap items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-100 dark:border-[#1b3356]">
         <div className="flex items-center gap-3">
           <span className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 rounded-sm bg-[#142e53]" />
+            <span className={`w-2.5 h-2.5 rounded-sm ${isDark ? 'bg-[#234470]' : 'bg-[#142e53]'}`} />
             <span>Dias normais</span>
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 rounded-sm bg-[#0284c7]" />
+            <span className="w-2.5 h-2.5 rounded-sm bg-[#38bdf8]" />
             <span>Dia de pico</span>
           </span>
           <span className="flex items-center gap-1">
@@ -252,7 +257,7 @@ export const AttendanceChart7Days: React.FC<AttendanceChart7DaysProps> = ({
           </span>
         </div>
 
-        <span className="text-[10px] text-slate-400 font-medium">
+        <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">
           Atualizado em tempo real
         </span>
       </div>

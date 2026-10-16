@@ -204,7 +204,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-800 flex flex-col antialiased selection:bg-[#fffe42] selection:text-[#142e53]">
+    <div className="min-h-screen bg-[#f8fafc] dark:bg-[#07101d] text-slate-800 dark:text-slate-100 flex flex-col antialiased selection:bg-[#fffe42] selection:text-[#142e53] transition-colors">
       {/* Top Header */}
       <Navbar
         onOpenSettings={() => setIsSettingsOpen(true)}

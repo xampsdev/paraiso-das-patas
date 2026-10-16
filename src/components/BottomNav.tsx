@@ -17,7 +17,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   return (
     <nav
       aria-label="Navegação principal"
-      className="fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 pb-safe shadow-lg"
+      className="fixed bottom-0 left-0 right-0 z-30 bg-white/95 dark:bg-[#091424]/95 backdrop-blur-md border-t border-slate-200 dark:border-[#1b3356] pb-safe shadow-lg transition-colors"
     >
       <div className="max-w-md mx-auto px-4 py-1.5 flex items-center justify-around">
         {/* Painel Diário */}
@@ -25,8 +25,8 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           onClick={() => onSelectScreen('painel')}
           className={`flex flex-col items-center py-1 px-3 rounded-2xl transition-all ${
             activeScreen === 'painel'
-              ? 'text-[#142e53] font-black'
-              : 'text-slate-400 hover:text-slate-600 font-medium'
+              ? 'text-[#142e53] dark:text-[#fffe42] font-black'
+              : 'text-slate-400 dark:text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-medium'
           }`}
         >
           <div
@@ -44,8 +44,8 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           onClick={() => onSelectScreen('caes')}
           className={`flex flex-col items-center py-1 px-3 rounded-2xl transition-all ${
             activeScreen === 'caes'
-              ? 'text-[#142e53] font-black'
-              : 'text-slate-400 hover:text-slate-600 font-medium'
+              ? 'text-[#142e53] dark:text-[#fffe42] font-black'
+              : 'text-slate-400 dark:text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-medium'
           }`}
         >
           <div
@@ -68,8 +68,8 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           onClick={() => onSelectScreen('historico')}
           className={`flex flex-col items-center py-1 px-3 rounded-2xl transition-all ${
             activeScreen === 'historico'
-              ? 'text-[#142e53] font-black'
-              : 'text-slate-400 hover:text-slate-600 font-medium'
+              ? 'text-[#142e53] dark:text-[#fffe42] font-black'
+              : 'text-slate-400 dark:text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-medium'
           }`}
         >
           <div
@@ -85,12 +85,12 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         {/* Supabase Config */}
         <button
           onClick={onOpenSettings}
-          className="flex flex-col items-center py-1 px-3 rounded-2xl text-slate-400 hover:text-slate-600 transition-all font-medium"
+          className="flex flex-col items-center py-1 px-3 rounded-2xl text-slate-400 dark:text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-all font-medium"
         >
           <div className="p-1.5 rounded-xl">
             <Settings className="w-5 h-5 stroke-[2.5]" />
           </div>
-          <span className="text-[10px] tracking-tight mt-0.5">Supabase</span>
+          <span className="text-[10px] tracking-tight mt-0.5">Configurações</span>
         </button>
       </div>
     </nav>

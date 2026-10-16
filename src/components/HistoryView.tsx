@@ -124,15 +124,15 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
   return (
     <div className="space-y-4">
       {/* Date Header Picker */}
-      <div className="bg-[#142e53] text-white p-4 rounded-3xl shadow-sm space-y-3">
+      <div className="bg-[#142e53] dark:bg-[#091424] text-white p-4 rounded-3xl shadow-sm space-y-3 border border-transparent dark:border-[#1b3356]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-[#fffe42] text-[#142e53] flex items-center justify-center font-black">
+            <div className="w-9 h-9 rounded-xl bg-[#fffe42] text-[#142e53] flex items-center justify-center font-black shadow-inner">
               <CalendarIcon className="w-5 h-5" />
             </div>
             <div>
               <h3 className="font-extrabold text-base text-white">Histórico de Presenças</h3>
-              <p className="text-xs text-slate-200">
+              <p className="text-xs text-slate-200 dark:text-slate-400">
                 {formatDateDisplay(selectedDate)}
                 {selectedDate === todayStr ? ' (Hoje)' : selectedDate === yesterdayStr ? ' (Ontem)' : ''}
               </p>
@@ -150,7 +150,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
         </div>
 
         {/* Date Selector Navigation Bar */}
-        <div className="flex items-center justify-between gap-2 bg-white/10 p-1.5 rounded-2xl">
+        <div className="flex items-center justify-between gap-2 bg-white/10 dark:bg-black/30 p-1.5 rounded-2xl">
           <button
             onClick={() => changeDateByDays(-1)}
             className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition active:scale-95"
@@ -164,7 +164,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
               type="date"
               value={selectedDate}
               onChange={(e) => onDateChange(e.target.value)}
-              className="bg-white text-[#142e53] font-bold text-xs sm:text-sm px-3 py-1.5 rounded-xl border-none focus:outline-none focus:ring-2 focus:ring-[#fffe42]"
+              className="bg-white dark:bg-[#12243d] text-[#142e53] dark:text-[#fffe42] font-bold text-xs sm:text-sm px-3 py-1.5 rounded-xl border border-transparent dark:border-[#1e3a63] focus:outline-none focus:ring-2 focus:ring-[#fffe42]"
             />
             {selectedDate !== todayStr && (
               <button
@@ -197,32 +197,32 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
 
       {/* Daily Metrics */}
       <div className="grid grid-cols-3 gap-2 text-center">
-        <div className="p-3 bg-white rounded-2xl border border-slate-200">
-          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Total</span>
-          <p className="text-xl font-black text-[#142e53] mt-0.5">{total}</p>
+        <div className="p-3 bg-white dark:bg-[#0d1c31] rounded-2xl border border-slate-200 dark:border-[#1b3356]">
+          <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total</span>
+          <p className="text-xl font-black text-[#142e53] dark:text-[#fffe42] mt-0.5">{total}</p>
         </div>
-        <div className="p-3 bg-emerald-50 rounded-2xl border border-emerald-200">
-          <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider">No Espaço</span>
-          <p className="text-xl font-black text-emerald-700 mt-0.5">{inside}</p>
+        <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 rounded-2xl border border-emerald-200 dark:border-emerald-800">
+          <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider">No Espaço</span>
+          <p className="text-xl font-black text-emerald-700 dark:text-emerald-400 mt-0.5">{inside}</p>
         </div>
-        <div className="p-3 bg-slate-100 rounded-2xl border border-slate-200">
-          <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">Concluídos</span>
-          <p className="text-xl font-black text-slate-800 mt-0.5">{completed}</p>
+        <div className="p-3 bg-slate-100 dark:bg-[#12243d] rounded-2xl border border-slate-200 dark:border-[#1b3356]">
+          <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Concluídos</span>
+          <p className="text-xl font-black text-slate-800 dark:text-slate-200 mt-0.5">{completed}</p>
         </div>
       </div>
 
       {/* Checkins List */}
       {isLoading ? (
-        <div className="py-12 text-center text-slate-400">
+        <div className="py-12 text-center text-slate-400 dark:text-slate-500">
           <p className="text-xs font-semibold">Carregando histórico do dia...</p>
         </div>
       ) : checkins.length === 0 ? (
-        <div className="p-8 text-center bg-white rounded-3xl border border-slate-200">
-          <div className="w-12 h-12 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-xl mb-2">
+        <div className="p-8 text-center bg-white dark:bg-[#0d1c31] rounded-3xl border border-slate-200 dark:border-[#1b3356]">
+          <div className="w-12 h-12 mx-auto rounded-full bg-slate-100 dark:bg-[#12243d] flex items-center justify-center text-xl mb-2">
             📅
           </div>
-          <h4 className="font-bold text-slate-700 text-sm">Sem presenças nesta data</h4>
-          <p className="text-xs text-slate-500 mt-1">
+          <h4 className="font-bold text-slate-700 dark:text-slate-200 text-sm">Sem presenças nesta data</h4>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Nenhum check-in registrado em {formatDateDisplay(selectedDate)}.
           </p>
         </div>
@@ -238,7 +238,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
             return (
               <div
                 key={item.id}
-                className="p-4 rounded-3xl bg-white border border-slate-200 hover:border-slate-300 transition shadow-xs flex flex-col justify-between"
+                className="p-4 rounded-3xl bg-white dark:bg-[#0d1c31] border border-slate-200 dark:border-[#1b3356] hover:border-slate-300 dark:hover:border-slate-600 transition shadow-xs flex flex-col justify-between"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-3">
@@ -246,20 +246,20 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                       {dogName.substring(0, 1)}
                     </div>
                     <div>
-                      <h4 className="font-extrabold text-base text-[#142e53] flex items-center gap-2">
+                      <h4 className="font-extrabold text-base text-[#142e53] dark:text-[#fffe42] flex items-center gap-2">
                         <span>{dogName}</span>
                         {isCompleted ? (
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold">
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-[#12243d] text-slate-700 dark:text-slate-300 font-bold">
                             Concluído
                           </span>
                         ) : (
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center gap-1">
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold flex items-center gap-1">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
                             No Espaço
                           </span>
                         )}
                       </h4>
-                      <p className="text-xs text-slate-500 flex items-center gap-1 font-medium mt-0.5">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1 font-medium mt-0.5">
                         <User className="w-3 h-3 text-slate-400" />
                         {tutor}
                       </p>
@@ -267,13 +267,13 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                   </div>
 
                   <div className="text-right">
-                    <div className="flex items-center justify-end gap-1 text-xs font-black text-[#142e53]">
+                    <div className="flex items-center justify-end gap-1 text-xs font-black text-[#142e53] dark:text-slate-200">
                       <Clock className="w-3.5 h-3.5 text-slate-400" />
                       <span>{formatTimeShort(item.hora_entrada)}</span>
-                      <span className="text-slate-400">→</span>
+                      <span className="text-slate-400 dark:text-slate-500">→</span>
                       <span>{item.hora_saida ? formatTimeShort(item.hora_saida) : 'Agora'}</span>
                     </div>
-                    <span className="text-[11px] font-semibold text-slate-500 block mt-0.5">
+                    <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mt-0.5">
                       ⏱️ {duration}
                     </span>
                   </div>
@@ -281,18 +281,18 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
 
                 {/* Observação do dia */}
                 {item.observacao_dia && (
-                  <div className="mt-2.5 p-2.5 rounded-xl bg-blue-50/70 border border-blue-200/50 text-[#142e53] text-xs flex items-start gap-1.5">
-                    <FileText className="w-3.5 h-3.5 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <div className="mt-2.5 p-2.5 rounded-xl bg-blue-50/70 dark:bg-[#12243d] border border-blue-200/50 dark:border-[#1e3a63] text-[#142e53] dark:text-slate-200 text-xs flex items-start gap-1.5">
+                    <FileText className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
                     <span>{item.observacao_dia}</span>
                   </div>
                 )}
 
                 {/* Action buttons */}
-                <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-end gap-2 text-xs">
+                <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-[#1b3356] flex items-center justify-end gap-2 text-xs">
                   {dog && (
                     <button
                       onClick={() => onEditCheckin(dog, item)}
-                      className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-slate-600 hover:text-[#142e53] hover:bg-slate-100 font-semibold transition"
+                      className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-300 hover:text-[#142e53] dark:hover:text-[#fffe42] hover:bg-slate-100 dark:hover:bg-[#12243d] font-semibold transition"
                     >
                       <Edit2 className="w-3 h-3" />
                       <span>Editar Horário</span>
@@ -305,7 +305,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                         onDeleteCheckin(item.id);
                       }
                     }}
-                    className="p-1.5 rounded-lg text-rose-500 hover:text-rose-700 hover:bg-rose-50 transition"
+                    className="p-1.5 rounded-lg text-rose-500 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition"
                     title="Excluir check-in"
                   >
                     <Trash2 className="w-3.5 h-3.5" />

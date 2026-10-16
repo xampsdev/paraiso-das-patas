@@ -1,7 +1,8 @@
 import React from 'react';
-import { Database, Plus, Sparkles } from 'lucide-react';
+import { Database, Plus, Sparkles, Sun, Moon } from 'lucide-react';
 import { PWAInstallButton } from './PWAInstallButton';
 import { isSupabaseConfigured } from '../lib/supabase';
+import { useTheme } from '../hooks/useTheme';
 
 interface NavbarProps {
   onOpenSettings: () => void;
@@ -14,9 +15,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenNewDog,
 }) => {
   const isCloudConnected = isSupabaseConfigured();
+  const { isDark, toggleTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-30 bg-[#142e53] text-white shadow-md border-b border-[#0c1d35] pt-safe">
+    <header className="sticky top-0 z-30 bg-[#142e53] dark:bg-[#091424] text-white shadow-md border-b border-[#0c1d35] dark:border-[#1b3356] pt-safe transition-colors">
       <div className="max-w-3xl mx-auto px-4 py-2.5 sm:py-3 flex items-center justify-between">
         {/* Brand */}
         <div className="flex items-center gap-2.5">
@@ -27,7 +29,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <h1 className="font-black text-base sm:text-lg tracking-tight flex items-center gap-1.5 leading-none">
               <span>Paraíso das Patas</span>
             </h1>
-            <p className="text-[10px] text-slate-300 font-medium leading-none mt-1">
+            <p className="text-[10px] text-slate-300 dark:text-slate-400 font-medium leading-none mt-1">
               Controle de Presença & Check-in
             </p>
           </div>
@@ -35,6 +37,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right Actions */}
         <div className="flex items-center gap-2">
+          {/* Quick Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-[#fffe42] transition active:scale-95"
+            title={isDark ? 'Alternar para Tema Claro' : 'Alternar para Modo Noturno'}
+            aria-label="Alternar tema"
+          >
+            {isDark ? <Sun className="w-4 h-4 text-amber-300 stroke-[2.5]" /> : <Moon className="w-4 h-4 text-[#fffe42] stroke-[2.5]" />}
+          </button>
+
           {/* PWA Install Button */}
           <PWAInstallButton compact />
 

@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
-import { Database, Check, Copy, ExternalLink, X, RefreshCw, AlertCircle, ShieldCheck } from 'lucide-react';
+import {
+  Database,
+  Check,
+  Copy,
+  ExternalLink,
+  X,
+  RefreshCw,
+  AlertCircle,
+  ShieldCheck,
+  Sun,
+  Moon,
+  Settings2,
+} from 'lucide-react';
 import {
   getStoredSupabaseConfig,
   saveStoredSupabaseConfig,
@@ -9,6 +21,7 @@ import {
   SUPABASE_SQL_SCHEMA,
 } from '../lib/supabase';
 import { syncLocalToSupabase } from '../lib/dataService';
+import { useTheme } from '../hooks/useTheme';
 
 interface SupabaseSettingsModalProps {
   isOpen: boolean;
@@ -30,7 +43,7 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncResult, setSyncResult] = useState<string | null>(null);
 
-  if (!isOpen) return null;
+  const { theme, setTheme, isDark, toggleTheme } = useTheme();
 
   const isConfigured = isSupabaseConfigured();
 
@@ -69,7 +82,8 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
         if (error.code === '42P01' || error.message?.includes('relation "public.dogs" does not exist')) {
           setTestResult({
             success: false,
-            message: 'Conectou ao Supabase! Porém a tabela "dogs" ainda não foi criada. Copie o script SQL abaixo e execute no SQL Editor.',
+            message:
+              'Conectou ao Supabase! Porém a tabela "dogs" ainda não foi criada. Copie o script SQL abaixo e execute no SQL Editor.',
           });
         } else {
           setTestResult({
@@ -106,7 +120,9 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
     setSyncResult(null);
     try {
       const result = await syncLocalToSupabase();
-      setSyncResult(`Sincronização concluída: ${result.dogsCount} cães e ${result.checkinsCount} checkins enviados.`);
+      setSyncResult(
+        `Sincronização concluída: ${result.dogsCount} cães e ${result.checkinsCount} checkins enviados.`
+      );
       onConfigChanged();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Erro ao sincronizar';
@@ -116,23 +132,29 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
     }
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
-      <div className="w-full max-w-lg rounded-2xl bg-white shadow-2xl text-slate-800 border border-slate-100 max-h-[90vh] flex flex-col my-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 overflow-y-auto animate-in fade-in">
+      <div className="w-full max-w-lg rounded-3xl bg-white dark:bg-[#0d1c31] shadow-2xl text-slate-800 dark:text-slate-100 border border-slate-100 dark:border-[#1b3356] max-h-[90vh] flex flex-col my-auto transition-colors">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 sm:p-5 border-b border-slate-100 bg-[#142e53] text-white rounded-t-2xl">
+        <div className="flex items-center justify-between p-4 sm:p-5 border-b border-slate-100 dark:border-[#1b3356] bg-[#142e53] dark:bg-[#091424] text-white rounded-t-3xl">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[#fffe42] text-[#142e53] flex items-center justify-center font-black">
-              <Database className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-2xl bg-[#fffe42] text-[#142e53] flex items-center justify-center font-black shadow-inner">
+              <Settings2 className="w-5 h-5 stroke-[2.5]" />
             </div>
             <div>
-              <h2 className="font-bold text-base sm:text-lg">Integração Supabase</h2>
-              <p className="text-xs text-slate-200">Backend em tempo real para creche canina</p>
+              <h2 className="font-extrabold text-base sm:text-lg tracking-tight">
+                Configurações & Tema
+              </h2>
+              <p className="text-xs text-slate-200">
+                Aparência do app e integração com banco de dados
+              </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-white/70 hover:text-white hover:bg-white/10"
+            className="p-1 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -140,18 +162,128 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
 
         {/* Content */}
         <div className="p-4 sm:p-5 overflow-y-auto space-y-4 text-xs sm:text-sm">
-          {/* Status Banner */}
+          {/* THEME SELECTOR SECTION (DARK MODE NOTURNO CUSTOMIZADO) */}
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-[#12243d] border border-slate-200 dark:border-[#1e3a63] space-y-3.5 transition-colors">
+            {/* Title and Switch row */}
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
+                  isDark ? 'bg-[#fffe42] text-[#142e53]' : 'bg-[#142e53] text-[#fffe42]'
+                }`}>
+                  {isDark ? <Moon className="w-4 h-4 stroke-[2.5]" /> : <Sun className="w-4 h-4 stroke-[2.5]" />}
+                </div>
+                <div>
+                  <span className="font-bold text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    Aparência da Tela
+                  </span>
+                  <h4 className="font-extrabold text-sm sm:text-base text-[#142e53] dark:text-[#fffe42] leading-tight">
+                    Modo Noturno (Dark Mode)
+                  </h4>
+                </div>
+              </div>
+
+              {/* Interactive Sliding Toggle Switch */}
+              <button
+                type="button"
+                role="switch"
+                aria-checked={isDark}
+                onClick={toggleTheme}
+                className={`relative inline-flex h-7 w-13 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#fffe42] focus:ring-offset-2 ${
+                  isDark ? 'bg-[#142e53]' : 'bg-slate-300'
+                }`}
+                title={isDark ? 'Desativar modo escuro' : 'Ativar modo escuro'}
+              >
+                <span className="sr-only">Alternar tema claro/escuro</span>
+                <span
+                  className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-[#fffe42] text-[#142e53] shadow-md ring-0 transition duration-200 ease-in-out flex items-center justify-center ${
+                    isDark ? 'translate-x-6' : 'translate-x-0'
+                  }`}
+                >
+                  {isDark ? (
+                    <Moon className="w-3.5 h-3.5 stroke-[2.5]" />
+                  ) : (
+                    <Sun className="w-3.5 h-3.5 stroke-[2.5]" />
+                  )}
+                </span>
+              </button>
+            </div>
+
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Alterne entre o tema clássico diurno e o modo escuro customizado. O modo noturno reduz a fadiga ocular em ambientes de pouca luz e facilita o uso ao ar livre ou durante check-outs no final da tarde e noite.
+            </p>
+
+            {/* Two Selectable Theme Cards */}
+            <div className="grid grid-cols-2 gap-2.5 pt-0.5">
+              {/* Option: Light Theme */}
+              <button
+                type="button"
+                onClick={() => setTheme('light')}
+                className={`flex flex-col text-left p-3 rounded-2xl border transition-all active:scale-98 ${
+                  theme === 'light'
+                    ? 'bg-white text-[#142e53] border-[#142e53] shadow-md ring-2 ring-[#142e53]/20'
+                    : 'bg-white/60 dark:bg-[#091424]/60 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-[#1b3356] hover:bg-white dark:hover:bg-[#091424]'
+                }`}
+              >
+                <div className="flex items-center justify-between w-full mb-1.5">
+                  <span className="p-1.5 rounded-lg bg-amber-100 text-amber-700">
+                    <Sun className="w-4 h-4 stroke-[2.5]" />
+                  </span>
+                  {theme === 'light' && (
+                    <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-[#142e53] text-[#fffe42]">
+                      Ativo
+                    </span>
+                  )}
+                </div>
+                <span className="font-extrabold text-xs text-slate-800 dark:text-slate-200">
+                  Tema Claro
+                </span>
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                  Uso diurno padrão
+                </span>
+              </button>
+
+              {/* Option: Dark Theme */}
+              <button
+                type="button"
+                onClick={() => setTheme('dark')}
+                className={`flex flex-col text-left p-3 rounded-2xl border transition-all active:scale-98 ${
+                  theme === 'dark'
+                    ? 'bg-[#142e53] text-white border-[#fffe42] shadow-lg ring-2 ring-[#fffe42]/40'
+                    : 'bg-white/60 dark:bg-[#091424]/60 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-[#1b3356] hover:bg-white dark:hover:bg-[#091424]'
+                }`}
+              >
+                <div className="flex items-center justify-between w-full mb-1.5">
+                  <span className="p-1.5 rounded-lg bg-[#091424] text-[#fffe42] border border-[#1e3a63]">
+                    <Moon className="w-4 h-4 stroke-[2.5]" />
+                  </span>
+                  {theme === 'dark' && (
+                    <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-[#fffe42] text-[#142e53]">
+                      Ativo
+                    </span>
+                  )}
+                </div>
+                <span className={`font-extrabold text-xs ${theme === 'dark' ? 'text-[#fffe42]' : 'text-slate-800 dark:text-slate-200'}`}>
+                  Modo Escuro
+                </span>
+                <span className={`text-[11px] mt-0.5 ${theme === 'dark' ? 'text-slate-200' : 'text-slate-500 dark:text-slate-400'}`}>
+                  Conforto noturno & OLED
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {/* Status Banner Supabase */}
           <div
-            className={`p-3.5 rounded-xl border flex items-start gap-3 ${
+            className={`p-3.5 rounded-2xl border flex items-start gap-3 ${
               isConfigured
-                ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
-                : 'bg-amber-50 border-amber-200 text-amber-800'
+                ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300'
+                : 'bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300'
             }`}
           >
             {isConfigured ? (
-              <ShieldCheck className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+              <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
             ) : (
-              <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
             )}
             <div>
               <p className="font-bold text-sm">
@@ -165,10 +297,10 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
             </div>
           </div>
 
-          {/* Form */}
+          {/* Form Supabase */}
           <div className="space-y-3">
             <div>
-              <label className="block font-semibold text-slate-700 mb-1">
+              <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                 SUPABASE_URL <span className="text-slate-400 font-normal">(VITE_SUPABASE_URL)</span>
               </label>
               <input
@@ -176,12 +308,12 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="https://xyzproject.supabase.co"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#142e53]"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-[#1e3a63] bg-white dark:bg-[#12243d] text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#142e53] dark:focus:ring-[#fffe42]"
               />
             </div>
 
             <div>
-              <label className="block font-semibold text-slate-700 mb-1">
+              <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                 SUPABASE_ANON_KEY <span className="text-slate-400 font-normal">(VITE_SUPABASE_ANON_KEY)</span>
               </label>
               <input
@@ -189,7 +321,7 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
                 value={anonKey}
                 onChange={(e) => setAnonKey(e.target.value)}
                 placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#142e53]"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-[#1e3a63] bg-white dark:bg-[#12243d] text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#142e53] dark:focus:ring-[#fffe42]"
               />
             </div>
 
@@ -198,7 +330,7 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
                 type="button"
                 onClick={handleTestConnection}
                 disabled={isTesting}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#142e53] text-[#fffe42] font-bold text-xs sm:text-sm hover:bg-[#0c1d35] active:scale-95 transition disabled:opacity-50"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#142e53] text-[#fffe42] font-bold text-xs sm:text-sm hover:bg-[#0c1d35] active:scale-95 transition disabled:opacity-50 shadow"
               >
                 {isTesting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Database className="w-4 h-4" />}
                 <span>Testar Conexão</span>
@@ -207,7 +339,7 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
               <button
                 type="button"
                 onClick={handleSave}
-                className="px-4 py-2 rounded-xl bg-slate-100 text-slate-800 font-semibold text-xs sm:text-sm hover:bg-slate-200 transition"
+                className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-[#12243d] text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-[#1e3a63] font-semibold text-xs sm:text-sm hover:bg-slate-200 transition"
               >
                 Salvar Credenciais
               </button>
@@ -216,7 +348,7 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
                 <button
                   type="button"
                   onClick={handleClear}
-                  className="px-3 py-2 rounded-xl text-rose-600 hover:bg-rose-50 text-xs font-semibold ml-auto"
+                  className="px-3 py-2 rounded-xl text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-xs font-semibold ml-auto"
                 >
                   Desconectar
                 </button>
@@ -227,8 +359,8 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
               <div
                 className={`p-3 rounded-xl text-xs font-medium border ${
                   testResult.success
-                    ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                    : 'bg-rose-50 text-rose-800 border-rose-200'
+                    ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
+                    : 'bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-800'
                 }`}
               >
                 {testResult.message}
@@ -238,11 +370,13 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
 
           {/* Sync Local Data button */}
           {isConfigured && (
-            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+            <div className="bg-slate-50 dark:bg-[#12243d] p-3.5 rounded-2xl border border-slate-200 dark:border-[#1e3a63]">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="font-bold text-slate-800">Exportar dados de teste para o Supabase</h4>
-                  <p className="text-xs text-slate-500">
+                  <h4 className="font-bold text-slate-800 dark:text-slate-200">
+                    Exportar dados de teste para o Supabase
+                  </h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     Envia os cães cadastrados localmente (Thor, Mel, Pipoca, etc.) para o banco Supabase.
                   </p>
                 </div>
@@ -255,7 +389,7 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
                 </button>
               </div>
               {syncResult && (
-                <p className="mt-2 text-xs font-medium text-emerald-700 bg-white p-2 rounded-lg border border-emerald-100">
+                <p className="mt-2 text-xs font-medium text-emerald-700 dark:text-emerald-300 bg-white dark:bg-[#0d1c31] p-2 rounded-lg border border-emerald-100 dark:border-emerald-800">
                   {syncResult}
                 </p>
               )}
@@ -263,9 +397,9 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
           )}
 
           {/* SQL Schema Section */}
-          <div className="border-t border-slate-200 pt-3">
+          <div className="border-t border-slate-200 dark:border-[#1b3356] pt-3">
             <div className="flex items-center justify-between mb-1.5">
-              <span className="font-bold text-slate-800 flex items-center gap-1.5">
+              <span className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
                 <span>Estrutura SQL das Tabelas (dogs & checkins)</span>
               </span>
               <button
@@ -277,8 +411,8 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
                 <span>{copiedSql ? 'Copiado!' : 'Copiar SQL'}</span>
               </button>
             </div>
-            <p className="text-xs text-slate-500 mb-2">
-              Se ainda não criou as tabelas no seu Supabase, abra o <strong>SQL Editor</strong> do painel e execute este script:
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
+              Abra o <strong>SQL Editor</strong> do painel Supabase e execute este script para criar as tabelas:
             </p>
             <pre className="p-3 bg-slate-900 text-emerald-400 font-mono text-[11px] rounded-xl overflow-x-auto max-h-44 border border-slate-800 select-all">
               {SUPABASE_SQL_SCHEMA}
@@ -288,7 +422,7 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
                 href="https://supabase.com/dashboard"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-[#142e53] font-bold hover:underline"
+                className="inline-flex items-center gap-1 text-xs text-[#142e53] dark:text-[#fffe42] font-bold hover:underline"
               >
                 <span>Acessar Painel Supabase</span>
                 <ExternalLink className="w-3 h-3" />
@@ -298,12 +432,12 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="p-3.5 sm:p-4 bg-slate-50 border-t border-slate-100 flex justify-end rounded-b-2xl">
+        <div className="p-3.5 sm:p-4 bg-slate-50 dark:bg-[#091424] border-t border-slate-100 dark:border-[#1b3356] flex justify-end rounded-b-3xl">
           <button
             onClick={onClose}
-            className="w-full sm:w-auto px-5 py-2 rounded-xl bg-[#142e53] text-[#fffe42] font-bold text-sm shadow hover:bg-[#0c1d35] transition"
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#142e53] text-[#fffe42] font-bold text-sm shadow hover:bg-[#0c1d35] transition"
           >
-            Fechar
+            Concluir
           </button>
         </div>
       </div>

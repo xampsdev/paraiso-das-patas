@@ -1,4 +1,4 @@
-# Controle de Presença & Check-in
+# Controle de Presença - Check-in/Check-out
 
 Aplicação web **mobile-first** de controle de presença desenvolvida para creches caninas, com foco em agilidade máxima e operação direta pelo smartphone da equipe.
 ---

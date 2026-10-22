@@ -22,9 +22,11 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="max-w-3xl mx-auto px-4 py-2.5 sm:py-3 flex items-center justify-between">
         {/* Brand */}
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#fffe42] text-[#142e53] flex items-center justify-center font-black text-xl shadow-md transform hover:rotate-6 transition">
-            🐾
-          </div>
+          <img
+            src="/icon.svg"
+            alt="Paraíso das Patas"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl shadow-md transform hover:rotate-6 transition object-cover"
+          />
           <div>
             <h1 className="font-black text-base sm:text-lg tracking-tight flex items-center gap-1.5 leading-none">
               <span>Paraíso das Patas</span>

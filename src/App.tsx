@@ -29,6 +29,7 @@ import { DailyNotesModal } from './components/DailyNotesModal';
 import { DogModal } from './components/DogModal';
 import { SupabaseSettingsModal } from './components/SupabaseSettingsModal';
 import { OfflineIndicator } from './components/OfflineIndicator';
+import { ReportExportModal } from './components/ReportExportModal';
 import { Check, Info } from 'lucide-react';
 
 export default function App() {
@@ -42,6 +43,7 @@ export default function App() {
   // Modals
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isDogModalOpen, setIsDogModalOpen] = useState(false);
+  const [isDailyExportModalOpen, setIsDailyExportModalOpen] = useState(false);
   const [editingDog, setEditingDog] = useState<Dog | null>(null);
   const [checkoutData, setCheckoutData] = useState<{ dog: Dog; checkin: Checkin } | null>(null);
   const [notesData, setNotesData] = useState<{ dog: Dog; checkin: Checkin } | null>(null);
@@ -232,6 +234,7 @@ export default function App() {
               setIsDogModalOpen(true);
             }}
             onRefresh={loadData}
+            onExportReport={() => setIsDailyExportModalOpen(true)}
           />
         )}
 
@@ -333,6 +336,15 @@ export default function App() {
           onConfigChanged={loadData}
         />
       )}
+
+      {/* Modal de Relatório do Dia */}
+      <ReportExportModal
+        isOpen={isDailyExportModalOpen}
+        onClose={() => setIsDailyExportModalOpen(false)}
+        selectedDate={getTodayDateString()}
+        checkins={todayCheckins}
+        dogs={dogs}
+      />
     </div>
   );
 }

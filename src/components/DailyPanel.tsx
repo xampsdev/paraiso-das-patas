@@ -13,7 +13,8 @@ import {
   Plus,
   RefreshCw,
   Sparkles,
-  Info
+  Info,
+  Download
 } from 'lucide-react';
 import { Dog, Checkin, AttendanceStatus, FilterTab } from '../types';
 import { formatTimeShort, calculateDuration } from '../lib/dataService';
@@ -29,6 +30,7 @@ interface DailyPanelProps {
   onEditNotesClick: (dog: Dog, checkin: Checkin) => void;
   onNewDogClick: () => void;
   onRefresh: () => void;
+  onExportReport?: () => void;
 }
 
 export const DailyPanel: React.FC<DailyPanelProps> = ({
@@ -42,6 +44,7 @@ export const DailyPanel: React.FC<DailyPanelProps> = ({
   onEditNotesClick,
   onNewDogClick,
   onRefresh,
+  onExportReport,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState<FilterTab>('todos');
@@ -209,24 +212,37 @@ export const DailyPanel: React.FC<DailyPanelProps> = ({
         </button>
       </div>
 
-      {/* Instant Search Bar */}
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
-          <Search className="w-4 h-4" />
+      {/* Instant Search Bar & Export Shortcut */}
+      <div className="flex items-center gap-2">
+        <div className="relative flex-1">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
+            <Search className="w-4 h-4" />
+          </div>
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Busca instantânea por nome do cão ou tutor..."
+            className="w-full pl-10 pr-9 py-3 rounded-2xl bg-white dark:bg-[#0d1c31] border border-slate-200 dark:border-[#1e3a63] text-sm font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#142e53] dark:focus:ring-[#fffe42] focus:border-transparent shadow-xs transition"
+          />
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm('')}
+              className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
+            >
+              ✕
+            </button>
+          )}
         </div>
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Busca instantânea por nome do cão ou tutor..."
-          className="w-full pl-10 pr-9 py-3 rounded-2xl bg-white dark:bg-[#0d1c31] border border-slate-200 dark:border-[#1e3a63] text-sm font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#142e53] dark:focus:ring-[#fffe42] focus:border-transparent shadow-xs transition"
-        />
-        {searchTerm && (
+
+        {onExportReport && (
           <button
-            onClick={() => setSearchTerm('')}
-            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
+            onClick={onExportReport}
+            className="py-3 px-3.5 rounded-2xl bg-white dark:bg-[#0d1c31] border border-slate-200 dark:border-[#1e3a63] hover:border-[#142e53] dark:hover:border-[#fffe42] text-[#142e53] dark:text-[#fffe42] font-black text-xs flex items-center gap-1.5 transition active:scale-95 shadow-xs flex-shrink-0"
+            title="Exportar relatório diário (CSV, PDF, WhatsApp, JSON)"
           >
-            ✕
+            <Download className="w-4 h-4 stroke-[2.5]" />
+            <span className="hidden sm:inline">Relatório</span>
           </button>
         )}
       </div>

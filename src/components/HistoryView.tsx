@@ -10,7 +10,8 @@ import {
   FileText,
   User,
   Trash2,
-  Edit2
+  Edit2,
+  Download
 } from 'lucide-react';
 import { Checkin, Dog } from '../types';
 import {
@@ -21,6 +22,7 @@ import {
   DailyAttendanceStat,
 } from '../lib/dataService';
 import { AttendanceChart7Days } from './AttendanceChart7Days';
+import { ReportExportModal } from './ReportExportModal';
 
 interface HistoryViewProps {
   selectedDate: string;
@@ -41,7 +43,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
   onEditCheckin,
   onDeleteCheckin,
 }) => {
-  const [copiedReport, setCopiedReport] = useState(false);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [stats7Days, setStats7Days] = useState<DailyAttendanceStat[]>([]);
   const [isLoadingStats, setIsLoadingStats] = useState(false);
 
@@ -87,40 +89,6 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
     return `${day}/${month}/${year}`;
   };
 
-  // Share report via clipboard
-  const handleShareReport = () => {
-    const displayDate = formatDateDisplay(selectedDate);
-    let report = `🐾 *RELATÓRIO DE PRESENÇA - PARAÍSO DAS PATAS*\n📅 Data: ${displayDate}\n\n`;
-    report += `🐶 *Total de Cães*: ${total} (No espaço: ${inside} | Saídas concluídas: ${completed})\n\n`;
-    report += `─────────────────────────\n`;
-
-    if (checkins.length === 0) {
-      report += `Nenhum check-in registrado nesta data.\n`;
-    } else {
-      checkins.forEach((c, idx) => {
-        const dog = c.dog || dogMap.get(c.dog_id);
-        const dogName = dog?.nome || 'Cão';
-        const tutor = dog?.tutor_nome || '';
-        const entrada = formatTimeShort(c.hora_entrada);
-        const saida = c.hora_saida ? formatTimeShort(c.hora_saida) : 'No espaço';
-        const dur = calculateDuration(c.hora_entrada, c.hora_saida);
-
-        report += `${idx + 1}. *${dogName}* (${tutor})\n`;
-        report += `   ⏰ Entrada: ${entrada} | Saída: ${saida} (${dur})\n`;
-        if (c.observacao_dia) {
-          report += `   📝 Obs: ${c.observacao_dia}\n`;
-        }
-        report += `\n`;
-      });
-    }
-
-    report += `─────────────────────────\nSistema Paraíso das Patas 🐶✨`;
-
-    navigator.clipboard.writeText(report);
-    setCopiedReport(true);
-    setTimeout(() => setCopiedReport(false), 2500);
-  };
-
   return (
     <div className="space-y-4">
       {/* Date Header Picker */}
@@ -140,12 +108,12 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           </div>
 
           <button
-            onClick={handleShareReport}
+            onClick={() => setIsExportModalOpen(true)}
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#fffe42] text-[#142e53] font-black text-xs hover:bg-yellow-300 transition active:scale-95 shadow"
-            title="Copiar relatório formatado para o WhatsApp"
+            title="Exportar relatório (CSV, PDF, WhatsApp, JSON)"
           >
-            {copiedReport ? <Check className="w-4 h-4 stroke-[3]" /> : <Share2 className="w-4 h-4" />}
-            <span>{copiedReport ? 'Copiado!' : 'Relatório'}</span>
+            <Download className="w-4 h-4" />
+            <span>Relatório</span>
           </button>
         </div>
 
@@ -316,6 +284,16 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           })}
         </div>
       )}
+
+      {/* Modal de Exportação de Relatórios */}
+      <ReportExportModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        selectedDate={selectedDate}
+        checkins={checkins}
+        dogs={dogs}
+      />
     </div>
   );
 };
+

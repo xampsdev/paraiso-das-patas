@@ -2,7 +2,9 @@
 
 Aplicação web **mobile-first** de controle de presença desenvolvida para creches caninas, com foco em agilidade máxima e operação direta pelo smartphone da equipe.
 
-<img width="380" height="480" alt="print-pdp" src="https://github.com/user-attachments/assets/bfbb982d-eb59-4af8-8e00-3a061691454c" />
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/bfbb982d-eb59-4af8-8e00-3a061691454c" alt="Demonstração da aplicação" height="450">
+</p>
 
 ---
 
